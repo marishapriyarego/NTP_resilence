@@ -1,0 +1,73 @@
+./Automate.bash 10.10.6.171
+AUTOMATION SCRIPT FOR NTPD RELATED TEST
+Version 0.1
+Basic Server Related Details
+Distributor ID: RedHatEnterpriseServer Codename: Santiago
+ Ntp version installed
+ntpd 4.2.6p5 ntpd 4.2.6p5@1.2349-o Mon Jul 15 09:22:49 UTC 2013 (1)
+ntp servers already configured
+     remote           refid      st t when poll reach   delay   offset  jitter
+==============================================================================
+ *10.10.6.171     .INIT.          16 u   23   64    0    0.000    0.000   0.000
+
+Test case : TC001
+ Test Case description :To synchronize with the ntp server which do not exists
+ commad : ntpdate -u 9.2.2.3
+ 7 Jun 09:11:25 ntpdate[20636]: no servers can be used, exiting
+Result as expected
+
+Test case : TC002
+ Test Case description :Trying to get the ntp status , when  ntpd daemon services are not started
+ commad : ntpdstat
+Shutting down ntpd:                                        [ OK ]
+Unable to talk to NTP daemon. Is it running?
+Result as expected
+Starting ntpd:                                             [ OK ]
+
+Test case : TC003
+ Test Case description :To synchronize the ntp server and ntp client when ntp client time is equal to ntp server
+ commad : ntpdate -u 10.10.6.171
+ 7 Jun 09:11:26 ntpdate[20661]: the NTP socket is in use, exiting
+Error in command excution
+
+Test case : TC004
+ Add the minpool and maxpool values
+ commad : ntpq -p
+
+ ntpq -p before setting the minpool maxpool value
+
+remote refid st t when poll reach delay offset jitter
+ ==============================================================================
+ *10.10.6.171 .INIT. 6 u   65   64  377    0.445  -3268.9 1415.24
+
+ After changing the polls 
+remote refid st t when poll reach delay offset jitter 
+============================================================================== 
+*10.10.6.171 .INIT. 6 u    4  128  377    0.445  -3268.9 1116.80
+
+Test case :TC005
+ Test Case description : To synchronize the ntp server and ntp client when when the  ntp client time  and ntp server time difference is n is more
+ command : ntpdate -d 10.10.6.171
+Mon Jun 8 09:11:29 IST 2015
+Trying to synchronize the ntp client and server after teh time is increased
+host found : 10.10.6.171
+ 8 Jun 09:11:29 ntpdate[21054]: no server suitable for synchronization found
+8 Jun 09:11:29 ntpdate[21054]: ntpdate 4.2.6p5@1.2349-o Mon Jul 15 09:22:50 UTC 2013 
+(1) Looking for host 10.10.6.171 and service ntp 
+transmit(10.10.6.171) 
+transmit to 10.10.6.171 
+receive(10.10.6.171) 
+transmit(10.10.6.171) 
+transmit to 10.10.6.171 
+receive(10.10.6.171)
+ transmit(10.10.6.171)
+ transmit to 10.10.6.171 
+ receive(10.10.6.171)
+ transmit(10.10.6.171)
+ transmit to 10.10.6.171 
+ receive(10.10.6.171) 
+ 10.10.6.171: Server dropped: strata too high server 10.10.6.171,
+ port 123 stratum 16, precision -23, leap 11, trust 000 refid [10.10.6.171], 
+ delay 0.02594, dispersion 0.00000 transmitted 4, 
+ in filter 4 reference time: 00000000.00000000 Mon, Jan 1 1900 5:53:20.000 originate timestamp: d91e3be2.763cb21d Sun, Jun 7 2015 9:11:22.461 transmit timestamp: d91f8d69.81c8d756 Mon, Jun 8 2015 9:11:29.506 filter delay: 0.02704 0.02597 0.02599 0.02594 0.00000 0.00000 0.00000 0.00000 filter offset: -86407.0 -86407.0 -86407.0 -86407.0 0.000000 0.000000 0.000000 0.000000 delay 0.02594, dispersion 0.00000 offset -86407.045320
+[root@localhost ~]#
